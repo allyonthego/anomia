@@ -1,4 +1,4 @@
-package com.anomia.rest;
+package com.anomia.rest.state;
 
 import lombok.Getter;
 

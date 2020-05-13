@@ -1,10 +1,10 @@
 package com.anomia;
 
-import com.anomia.rest.Card;
-import com.anomia.rest.Game;
+import com.anomia.rest.state.Card;
+import com.anomia.rest.state.Game;
 import org.junit.jupiter.api.Test;
 
-import static com.anomia.rest.CardColour.BLUE;
+import static com.anomia.rest.state.CardColour.BLUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameTest {

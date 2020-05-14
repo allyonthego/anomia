@@ -9,28 +9,35 @@ import java.util.Stack;
 public class Game {
     private static int count = 0;
     @Getter
-    private final int id;
+    private int id;
     @Getter
-    private Stack<Card> drawPile;
+    private Stack<Card> drawPile = new Stack<>();
     @Getter
-    private ArrayList<Player> players;
+    private ArrayList<Player> players = new ArrayList<>();;
 
-    public Game() {
+    public Game(int numPlayers) {
         id = count;
         ++count;
-    }
-
-    public int startGame(int numPlayers) {
         createDrawPile();
         createPlayers(numPlayers);
-        return id;
+    }
+
+    public Player getPlayerById(int playerId) {
+        return players.get(playerId);
+    }
+
+    public void addPlayPile(int playerId) {
+        getPlayerById(playerId).addPlayPile(drawPile.pop());
+    }
+
+    public static void decrCount() {
+        --count;
     }
 
     private void createDrawPile() {
         drawPile = CardPile.createPile();
     }
     private void createPlayers(int numPlayers) {
-        players = new ArrayList<>();
         for (int i = 0; i < numPlayers; ++i) {
             players.add(new Player());
         }

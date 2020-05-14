@@ -1,6 +1,7 @@
 package com.anomia.rest.state;
 
 import lombok.Getter;
+import lombok.Setter;
 
 public class Card {
     private static int count = 0;
@@ -9,6 +10,7 @@ public class Card {
     @Getter
     private CardColour colour;
     @Getter
+    @Setter
     private boolean isReveal = false;
     @Getter
     private String word;

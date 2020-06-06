@@ -1,4 +1,4 @@
-package com.anomia.rest.state;
+package com.anomia.controller.state;
 
 import lombok.Getter;
 
@@ -37,6 +37,7 @@ public class Game {
     private void createDrawPile() {
         drawPile = CardPile.createPile();
     }
+
     private void createPlayers(int numPlayers) {
         for (int i = 0; i < numPlayers; ++i) {
             players.add(new Player());

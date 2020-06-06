@@ -1,11 +1,11 @@
-package com.anomia.rest;
+package com.anomia.controller;
 
-import com.anomia.rest.json.StartGameRequest;
-import com.anomia.rest.json.StartGameResponse;
-import com.anomia.rest.state.Game;
-import com.anomia.rest.state.Player;
-import lombok.Getter;
-import lombok.Setter;
+import com.anomia.controller.reqres.GameResponse;
+import com.anomia.controller.reqres.PlayerResponse;
+import com.anomia.controller.reqres.StartGameRequest;
+import com.anomia.controller.reqres.StartGameResponse;
+import com.anomia.controller.state.Game;
+import com.anomia.controller.state.Player;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,21 +22,21 @@ public class AnomiaController {
     }
 
     @GetMapping("/games/{gameId}")
-    public Game getGame(@PathVariable int gameId) {
-        return gameList.get(gameId);
+    public GameResponse getGame(@PathVariable int gameId) {
+        return new GameResponse(gameList.get(gameId));
     }
 
     @PostMapping("/games/{gameId}/{playerId}/playPile")
-    public Player postAddPlayPile(@PathVariable int gameId, @PathVariable int playerId) {
+    public PlayerResponse postAddPlayPile(@PathVariable int gameId, @PathVariable int playerId) {
         Game game = gameList.get(gameId);
         game.addPlayPile(playerId);
-        return game.getPlayerById(playerId);
+        return new PlayerResponse(game.getPlayerById(playerId));
     }
 
+    // for testing
     public void gameListAdd(Game game) {
         gameList.add(game);
     }
-
     public void gameListRemove() {
         Game.decrCount();
         gameList.remove(gameList.size() - 1);

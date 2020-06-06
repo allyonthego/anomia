@@ -1,8 +1,8 @@
 package com.anomia;
 
-import com.anomia.rest.AnomiaController;
-import com.anomia.rest.json.StartGameRequest;
-import com.anomia.rest.state.Game;
+import com.anomia.controller.AnomiaController;
+import com.anomia.controller.reqres.StartGameRequest;
+import com.anomia.controller.state.Game;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static com.anomia.helper.Helper.asJsonString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AnomiaApplicationTests {
+class AnomiaApplicationTest {
 
 	@Autowired
 	private AnomiaController controller;
@@ -45,7 +44,7 @@ class AnomiaApplicationTests {
 	}
 
 	@Test
-	void WHEN_GetGame_THEN_ReturnGame() throws Exception {
+	void WHEN_GetGame_THEN_ReturnGameResponse() throws Exception {
 		controller.gameListAdd(new Game(numPlayers));
 		mockMvc
 			.perform(get("/games/0"))

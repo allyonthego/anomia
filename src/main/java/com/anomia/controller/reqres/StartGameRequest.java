@@ -1,4 +1,4 @@
-package com.anomia.rest.json;
+package com.anomia.controller.reqres;
 
 import lombok.Getter;
 

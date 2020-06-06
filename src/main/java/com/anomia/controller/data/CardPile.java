@@ -1,9 +1,9 @@
-package com.anomia.controller.state;
+package com.anomia.controller.data;
 
 import java.util.Arrays;
 import java.util.Stack;
 
-import static com.anomia.controller.state.CardColour.BLUE;
+import static com.anomia.controller.data.CardColour.BLUE;
 
 public class CardPile {
     public static Stack<Card> createPile() {

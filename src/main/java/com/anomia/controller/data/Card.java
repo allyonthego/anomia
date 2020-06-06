@@ -1,4 +1,4 @@
-package com.anomia.controller.state;
+package com.anomia.controller.data;
 
 import lombok.Getter;
 import lombok.Setter;

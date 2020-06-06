@@ -1,8 +1,9 @@
 package com.anomia;
 
 import com.anomia.controller.AnomiaController;
+import com.anomia.controller.reqres.AddWinRequest;
 import com.anomia.controller.reqres.StartGameRequest;
-import com.anomia.controller.state.Game;
+import com.anomia.controller.data.Game;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,6 +42,7 @@ class AnomiaApplicationTest {
 				.contentType(APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("\"gameId\":0")));
+		controller.gameListRemove();
 	}
 
 	@Test
@@ -54,12 +56,25 @@ class AnomiaApplicationTest {
 	}
 
 	@Test
-	void WHEN_PostAddPlayPile_THEN_ReturnPlayer() throws Exception {
+	void WHEN_PostAddPlayPile_THEN_Return() throws Exception {
 		controller.gameListAdd(new Game(numPlayers));
 		mockMvc
 			.perform(post("/games/0/0/playPile"))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("\"id\":0")));
+			.andExpect(status().isOk());
+		controller.gameListRemove();
+	}
+
+	@Test
+	void WHEN_PostAddWinPile_THEN_Return() throws Exception {
+		Game game = new Game(numPlayers);
+		controller.gameListAdd(game);
+		game.addPlayPile(0);
+		game.addPlayPile(1);
+		mockMvc
+				.perform(post("/games/0/0/winPile")
+					.content(asJsonString(new AddWinRequest(1)))
+					.contentType(APPLICATION_JSON))
+				.andExpect(status().isOk());
 		controller.gameListRemove();
 	}
 }

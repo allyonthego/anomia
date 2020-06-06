@@ -1,11 +1,8 @@
 package com.anomia.controller;
 
-import com.anomia.controller.reqres.GameResponse;
-import com.anomia.controller.reqres.PlayerResponse;
-import com.anomia.controller.reqres.StartGameRequest;
-import com.anomia.controller.reqres.StartGameResponse;
-import com.anomia.controller.state.Game;
-import com.anomia.controller.state.Player;
+import com.anomia.controller.data.Player;
+import com.anomia.controller.reqres.*;
+import com.anomia.controller.data.Game;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,15 +19,22 @@ public class AnomiaController {
     }
 
     @GetMapping("/games/{gameId}")
-    public GameResponse getGame(@PathVariable int gameId) {
-        return new GameResponse(gameList.get(gameId));
+    public Game getGame(@PathVariable int gameId) {
+        return gameList.get(gameId);
     }
 
     @PostMapping("/games/{gameId}/{playerId}/playPile")
-    public PlayerResponse postAddPlayPile(@PathVariable int gameId, @PathVariable int playerId) {
+    public void postAddPlayPile(@PathVariable int gameId, @PathVariable int playerId) {
         Game game = gameList.get(gameId);
         game.addPlayPile(playerId);
-        return new PlayerResponse(game.getPlayerById(playerId));
+    }
+
+    // req.getLoseId() cannot have empty play pile
+    @PostMapping("/games/{gameId}/{playerId}/winPile")
+    public void postAddWinPile(@PathVariable int gameId, @PathVariable int playerId,
+        @RequestBody AddWinRequest req) {
+        Game game = gameList.get(gameId);
+        game.addWinPile(playerId, req.getLoseId());
     }
 
     // for testing

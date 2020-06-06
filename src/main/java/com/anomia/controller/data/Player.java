@@ -1,4 +1,4 @@
-package com.anomia.controller.state;
+package com.anomia.controller.data;
 
 import lombok.Getter;
 
@@ -24,5 +24,21 @@ public class Player {
         }
         card.setReveal(true);
         playPile.push(card);
+    }
+
+    public Card takePlayPile() {
+        Card card = playPile.pop();
+        if (playPile.size() != 0) {
+            playPile.peek().setReveal(true);
+        }
+        return card;
+    }
+
+    public void addWinPile(Card card) {
+        if (winPile.size() != 0) {
+            winPile.peek().setReveal(false);
+        }
+        card.setReveal(true);
+        winPile.push(card);
     }
 }

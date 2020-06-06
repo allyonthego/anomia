@@ -1,4 +1,4 @@
-package com.anomia.controller.state;
+package com.anomia.controller.data;
 
 import lombok.Getter;
 
@@ -22,20 +22,24 @@ public class Game {
         createPlayers(numPlayers);
     }
 
-    public Player getPlayerById(int playerId) {
-        return players.get(playerId);
-    }
-
     public void addPlayPile(int playerId) {
         getPlayerById(playerId).addPlayPile(drawPile.pop());
+    }
+
+    public void addWinPile(int winId, int loseId) {
+        getPlayerById(winId).addWinPile(getPlayerById(loseId).takePlayPile());
+    }
+
+    private void createDrawPile() {
+        drawPile = CardPile.createPile();
     }
 
     public static void decrCount() {
         --count;
     }
 
-    private void createDrawPile() {
-        drawPile = CardPile.createPile();
+    public Player getPlayerById(int playerId) {
+        return players.get(playerId);
     }
 
     private void createPlayers(int numPlayers) {

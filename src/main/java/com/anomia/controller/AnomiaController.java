@@ -1,8 +1,10 @@
 package com.anomia.controller;
 
-import com.anomia.controller.data.Player;
-import com.anomia.controller.reqres.*;
 import com.anomia.controller.data.Game;
+import com.anomia.controller.reqres.AddWinRequest;
+import com.anomia.controller.reqres.EndGameResponse;
+import com.anomia.controller.reqres.StartGameRequest;
+import com.anomia.controller.reqres.StartGameResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -11,11 +13,12 @@ import java.util.ArrayList;
 public class AnomiaController {
     private static ArrayList<Game> gameList = new ArrayList<>();
 
-    @PostMapping("/games")
-    public StartGameResponse postGame(@RequestBody StartGameRequest req) {
-        Game game = new Game(req.getNumPlayers());
-        gameList.add(game);
-        return new StartGameResponse(game.getId());
+    @DeleteMapping("/games/{gameId}")
+    public EndGameResponse deleteGame(@PathVariable int gameId) {
+        Game game = gameList.get(gameId);
+        EndGameResponse endGameResponse = new EndGameResponse(game);
+        gameListRemove(game.getId());
+        return endGameResponse;
     }
 
     @GetMapping("/games/{gameId}")
@@ -32,17 +35,27 @@ public class AnomiaController {
     // req.getLoseId() cannot have empty play pile
     @PostMapping("/games/{gameId}/{playerId}/winPile")
     public void postAddWinPile(@PathVariable int gameId, @PathVariable int playerId,
-        @RequestBody AddWinRequest req) {
+                               @RequestBody AddWinRequest req) {
         Game game = gameList.get(gameId);
         game.addWinPile(playerId, req.getLoseId());
     }
 
-    // for testing
+    @PostMapping("/games")
+    public StartGameResponse postGame(@RequestBody StartGameRequest req) {
+        Game game = new Game(req.getNumPlayers());
+        gameList.add(game);
+        return new StartGameResponse(game.getId());
+    }
+
     public void gameListAdd(Game game) {
         gameList.add(game);
     }
+    public int gameListCount() { return gameList.size(); }
     public void gameListRemove() {
+        gameListRemove(gameList.size() - 1);
+    }
+    public void gameListRemove(int gameId) {
         Game.decrCount();
-        gameList.remove(gameList.size() - 1);
+        gameList.remove(gameId);
     }
 }

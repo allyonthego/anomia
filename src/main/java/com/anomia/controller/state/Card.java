@@ -19,6 +19,7 @@ public class Card {
         id = cardEntity.getId();
         colour = CardColour.valueOf(cardEntity.getColour());
         word = cardEntity.getWord();
+        isReveal = cardEntity.isReveal();
     }
     // testing
     public Card(int id, CardEntity cardEntity) {

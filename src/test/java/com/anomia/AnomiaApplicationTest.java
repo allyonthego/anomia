@@ -133,7 +133,9 @@ class AnomiaApplicationTest {
 				.andExpect(content().string(containsString("\"gameId\":"+gameId)));
 
 		assertEquals(1, controller.gameListCount());
-		assertTrue(endSaveGameCheckRepo(gameId));
+		Game game = controller.gameListGet(gameId);
+		// write unit tests for game
+
 		controller.deleteGame(gameId);
 	}
 

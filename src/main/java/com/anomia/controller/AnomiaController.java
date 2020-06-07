@@ -68,5 +68,6 @@ public class AnomiaController {
         gameList.put(game.getId(),game);
     }
     public int gameListCount() { return gameList.size(); }
+    public Game gameListGet(int gameId) { return gameList.get(gameId); }
     public void gameListRemove(int gameId) { gameList.remove(gameId); }
 }

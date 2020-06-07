@@ -4,6 +4,7 @@ import com.anomia.controller.AnomiaController;
 import com.anomia.controller.database.*;
 import com.anomia.controller.reqres.AddWinRequest;
 import com.anomia.controller.reqres.StartGameRequest;
+import com.anomia.controller.reqres.StartGameResponse;
 import com.anomia.controller.state.Game;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ class AnomiaApplicationTest {
 
 	int numPlayers = 2;
 	int gameId = 1;
+	int numCards = 20;
 
 	@Test
 	void contextLoads() {
@@ -59,15 +61,15 @@ class AnomiaApplicationTest {
 
 	@Test
 	void WHEN_EndGame_THEN_ReturnEndGameResponse() throws Exception {
-		controller.postGame(new StartGameRequest(numPlayers));
+		StartGameResponse res = controller.postGame(new StartGameRequest(numPlayers));
 		mockMvc
-				.perform(delete("/games/1"))
+				.perform(delete("/games/"+res.getGameId()))
 				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("\"cardCounts\":")));
 		assertEquals(0, controller.gameListCount());
 		assertEquals(0,cardRepository.findAllByGameId(gameId).size());
-		assertTrue(!gameRepository.findById(gameId).isPresent());
 		assertEquals(0,playerRepostiory.findAllByGameId(gameId).size());
+		assertEquals(0,gameRepository.findAllById(gameId).size());
 	}
 
 	@Test
@@ -95,6 +97,7 @@ class AnomiaApplicationTest {
 
 	@Test
 	void WHEN_PostStartGame_THEN_ReturnGameId() throws Exception {
+		// gameid might not be 1
 		mockMvc
 				.perform(post("/games")
 						.content(asJsonString(new StartGameRequest(numPlayers)))
@@ -109,25 +112,21 @@ class AnomiaApplicationTest {
 	boolean checkRepository() {
 		List<CardEntity> cardEntities = cardRepository.findAllByGameId(gameId);
 		List<PlayerEntity> playerEntities = playerRepostiory.findAllByGameId(gameId);
-		GameEntity gameEntity = gameRepository.findById(gameId).get();
+		List<GameEntity> gameEntities = gameRepository.findAllById(gameId);
 
-		assertEquals(5,cardEntities.size());
-		assertEquals(1,gameEntity.getId());
+		assertEquals(numCards,cardEntities.size());
+		assertEquals(1,gameEntities.size());
 		assertEquals(2,playerEntities.size());
 
-		int gameEntityId = gameEntity.getId();
+		int gameEntityId = gameEntities.get(0).getId();
 		PlayerEntity playerEntity = playerEntities.get(0);
 		CardEntity cardEntity = cardEntities.get(0);
 
 		assertEquals(gameEntityId,playerEntity.getGameId());
 		assertEquals(gameEntityId,cardEntity.getGameId());
-		assertEquals("BLUE",cardEntity.getColour());
 		assertEquals(0,cardEntity.getPlayerId());
-		assertEquals("Test",cardEntity.getWord());
-		assertTrue(cardEntity.isDrawPile());
 		assertTrue(!cardEntity.isReveal());
-		assertTrue(!cardEntity.isWinPile());
-		assertTrue(!cardEntity.isPlayPile());
+		assertEquals(1,cardEntity.getWhichPile());
 
 		return true;
 	}

@@ -25,6 +25,14 @@ public class AnomiaController {
         return endGameResponse;
     }
 
+    @DeleteMapping("/games/{gameId}/save")
+    public EndGameResponse deleteSaveGame(@PathVariable int gameId) {
+        EndGameResponse endGameResponse = new EndGameResponse(gameList.get(gameId));
+        gameService.endSaveGame(gameList.get(gameId));
+        gameList.remove(gameId);
+        return endGameResponse;
+    }
+
     @GetMapping("/games/{gameId}")
     public Game getGame(@PathVariable int gameId) {
         return gameList.get(gameId);
@@ -36,7 +44,7 @@ public class AnomiaController {
         game.addPlayPile(playerId);
     }
 
-    // req.getLoseId() cannot have empty play pile
+    // requirement: req.getLoseId() cannot have empty play pile
     @PostMapping("/games/{gameId}/{playerId}/winPile")
     public void postAddWinPile(@PathVariable int gameId, @PathVariable int playerId,
                                @RequestBody AddWinRequest req) {
@@ -51,7 +59,15 @@ public class AnomiaController {
         return new StartGameResponse(game.getId());
     }
 
-    // for testing
+    // requirement: cannot postSaveGame in the middle of a game
+    @PostMapping("/games/{gameId}/save")
+    public StartGameResponse postSaveGame(@PathVariable int gameId) {
+        Game game = gameService.startSaveGame(gameId);
+        gameList.put(game.getId(),game);
+        return new StartGameResponse(game.getId());
+    }
+
+    // testing
     public void gameListAdd(Game game) {
         gameList.put(game.getId(),game);
     }

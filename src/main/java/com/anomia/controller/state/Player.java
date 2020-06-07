@@ -16,6 +16,12 @@ public class Player {
         this.id = id;
     }
 
+    public Player(int id, Stack<Card> playPile, Stack<Card> winPile) {
+        this.id = id;
+        this.playPile = playPile;
+        this.winPile = winPile;
+    }
+
     public void addPlayPile(Card card) {
         if (playPile.size() != 0) {
             playPile.peek().setReveal(false);

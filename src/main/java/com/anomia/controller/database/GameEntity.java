@@ -1,5 +1,6 @@
 package com.anomia.controller.database;
 
+import com.anomia.controller.state.Game;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -14,4 +15,5 @@ public class GameEntity {
     @GeneratedValue(strategy=IDENTITY)
     private int id;
     public GameEntity() {}
+    public GameEntity(Game game) { id = game.getId(); }
 }

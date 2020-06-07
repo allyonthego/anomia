@@ -5,32 +5,45 @@ import com.anomia.controller.database.CardEntity;
 import java.util.Arrays;
 import java.util.Stack;
 
-import static com.anomia.controller.state.CardColour.BLUE;
-
+// refactor to list it out only once
 public class CardEntityPile {
-    // testing
-    public static Stack<Card> createCardPile() {
-        Card[] pile = {
-                new Card(1,BLUE, "Test"),
-                new Card(2,BLUE, "Test"),
-                new Card(3,BLUE, "Test"),
-                new Card(4,BLUE, "Test"),
-                new Card(5,BLUE, "Test"),
-        };
-        Stack<Card> stack = new Stack<>();
-        stack.addAll(Arrays.asList(pile));
-        return stack;
-    }
     public static Stack<CardEntity> createCardEntityPile(int gameId) {
         CardEntity[] pile = {
-                new CardEntity(gameId,"BLUE", "Test"),
-                new CardEntity(gameId,"BLUE", "Test"),
-                new CardEntity(gameId,"BLUE", "Test"),
-                new CardEntity(gameId,"BLUE", "Test"),
-                new CardEntity(gameId,"BLUE", "Test"),
+                new CardEntity(gameId,"BLUE", "Clothing"),
+                new CardEntity(gameId,"YELLOW", "Reality TV Show"),
+                new CardEntity(gameId,"BLUE", "Keyboard Key"),
+                new CardEntity(gameId,"GREEN", "Pasta"),
+                new CardEntity(gameId,"RED", "Month"),
+                new CardEntity(gameId,"RED", "Plant"),
+                new CardEntity(gameId,"YELLOW", "Radio Station"),
+                new CardEntity(gameId,"GREEN", "Reptile"),
+                new CardEntity(gameId,"GREEN", "Restaurant"),
+                new CardEntity(gameId,"BLUE", "Dinosaur"),
+                new CardEntity(gameId,"YELLOW", "Male tennis player"),
+                new CardEntity(gameId,"RED", "Astronaut"),
+                new CardEntity(gameId,"GREEN", "Breakfast"),
+                new CardEntity(gameId,"YELLOW", "Bean"),
+                new CardEntity(gameId,"BLUE", "Hat"),
+                new CardEntity(gameId,"RED", "Rock Opera"),
+                new CardEntity(gameId,"YELLOW", "Sitcom"),
+                new CardEntity(gameId,"YELLOW", "Vegetable"),
+                new CardEntity(gameId,"GREEN", "Hot Drink"),
+                new CardEntity(gameId,"RED", "Palindrome"),
         };
         Stack<CardEntity> stack = new Stack<>();
         stack.addAll(Arrays.asList(pile));
+        return stack;
+    }
+
+    // testing
+    public static Stack<Card> createCardPile() {
+        Stack<Card> stack = new Stack<>();
+        Stack<CardEntity> entityStack = createCardEntityPile(1);
+        int i = 1;
+        while(!entityStack.isEmpty()) {
+            stack.push(new Card(i,entityStack.pop()));
+            ++i;
+        }
         return stack;
     }
 }

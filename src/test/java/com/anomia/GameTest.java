@@ -5,17 +5,17 @@ import com.anomia.controller.state.Game;
 import com.anomia.controller.state.Player;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
+import static com.anomia.controller.state.CardColour.BLUE;
 import static com.anomia.helper.Helper.createEmptyGame;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
-    private int playerId = 0;
-    private int numCards = 5;
-    private int numPlayers = 4;
+    private int playerId = 1;
+    private int numCards = 20;
+    private int numPlayers = 2;
 
     // Step 1
     @Test
@@ -30,10 +30,11 @@ public class GameTest {
     public boolean drawPilePopulated(Stack<Card> drawPile) {
         assertEquals(numCards, drawPile.size());
         Card card = drawPile.peek();
-        assertEquals(numCards - 1, card.getId());
+        assertEquals(numCards , card.getId());
         assert(!card.isReveal());
 
-        assertEquals("Test", card.getWord());
+        assertEquals(BLUE, card.getColour());
+        assertEquals("Clothing", card.getWord());
         return true;
     }
 

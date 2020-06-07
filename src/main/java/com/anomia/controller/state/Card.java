@@ -21,9 +21,9 @@ public class Card {
         word = cardEntity.getWord();
     }
     // testing
-    public Card(int id, CardColour colour, String word) {
+    public Card(int id, CardEntity cardEntity) {
         this.id = id;
-        this.colour = colour;
-        this.word = word;
+        colour = CardColour.valueOf(cardEntity.getColour());
+        word = cardEntity.getWord();
     }
 }

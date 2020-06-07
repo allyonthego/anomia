@@ -6,6 +6,7 @@ import com.anomia.controller.state.Player;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Stack;
 
 import static com.anomia.helper.Helper.createEmptyGame;
@@ -16,7 +17,6 @@ public class GameTest {
     private int numCards = 5;
     private int numPlayers = 4;
 
-    // create game in play to simulate this
     // Step 1
     @Test
     public void WHEN_StartGame_THEN_GamePopulated() {
@@ -25,8 +25,6 @@ public class GameTest {
         assertNotNull(game);
         assertTrue(drawPilePopulated(game.getDrawPile()));
         assertTrue(playersPopulated(game.getPlayers()));
-
-//        Game.decrCount();
     }
 
     public boolean drawPilePopulated(Stack<Card> drawPile) {
@@ -39,7 +37,7 @@ public class GameTest {
         return true;
     }
 
-    public boolean playersPopulated(ArrayList<Player> players) {
+    public boolean playersPopulated(HashMap<Integer,Player> players) {
         assertEquals(numPlayers, players.size());
         assertEquals(playerId, players.get(playerId).getId());
         return true;
@@ -56,7 +54,6 @@ public class GameTest {
         assertEquals(1, playPile.size());
         assertEquals(true, playPile.peek().isReveal());
 
-//        Game.decrCount();
     }
 
     // Step 3

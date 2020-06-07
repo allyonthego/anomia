@@ -14,5 +14,9 @@ public class PlayerEntity {
     @GeneratedValue
     @Id
     private int id;
+    @Getter
+    private int gameId;
+
     public PlayerEntity() {}
+
 }

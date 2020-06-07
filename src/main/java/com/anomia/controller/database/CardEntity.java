@@ -18,9 +18,26 @@ public class CardEntity {
     private String colour;
     @Getter
     private String word;
+    @Getter
+    private int gameId;
+    @Getter
+    private int playerId;
+    @Getter
+    private boolean winPile;
+    @Getter
+    private boolean playPile;
+    @Getter
+    private boolean isReveal;
 
     public CardEntity() {}
-    public CardEntity(String colour, String word) {
+
+    // testing only
+//    public CardEntity(String colour, String word) {
+//        this.colour = colour;
+//        this.word = word;
+//    }
+    public CardEntity(int id, String colour, String word) {
+        this.id = id;
         this.colour = colour;
         this.word = word;
     }

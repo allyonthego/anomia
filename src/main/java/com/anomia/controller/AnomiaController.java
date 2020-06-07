@@ -47,7 +47,6 @@ public class AnomiaController {
     @PostMapping("/games")
     public StartGameResponse postGame(@RequestBody StartGameRequest req) {
         Game game = gameService.startGame(req.getNumPlayers());
-//        Game game = new Game(req.getNumPlayers());
         gameList.put(game.getId(),game);
         return new StartGameResponse(game.getId());
     }
@@ -57,11 +56,5 @@ public class AnomiaController {
         gameList.put(game.getId(),game);
     }
     public int gameListCount() { return gameList.size(); }
-//    public void gameListRemove() {
-//        gameListRemove(gameList.size() - 1);
-//    }
-    public void gameListRemove(int gameId) {
-//        Game.decrCount();
-        gameList.remove(gameId);
-    }
+    public void gameListRemove(int gameId) { gameList.remove(gameId); }
 }

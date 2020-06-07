@@ -2,14 +2,15 @@ package com.anomia.helper;
 
 import com.anomia.controller.database.CardEntity;
 import com.anomia.controller.state.Card;
-import com.anomia.controller.state.CardPile;
 import com.anomia.controller.state.Game;
 import com.anomia.controller.state.Player;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Stack;
+
+import static com.anomia.controller.state.CardEntityPile.*;
 
 public class Helper {
     public static String asJsonString(Object obj) {
@@ -20,14 +21,16 @@ public class Helper {
         }
     }
     public static Game createEmptyGame() {
-        ArrayList<Player> players = new ArrayList<Player>();
-        players.add(new Player(0));
-        players.add(new Player(1));
-        Stack<CardEntity> cardEntities = CardPile.createCardEntityPile();
+        HashMap<Integer, Player> players = new HashMap<>();
+        players.put(1, new Player(1));
+        players.put(2, new Player(2));
+        Stack<CardEntity> cardEntities = createCardEntityPile();
         Stack<Card> drawPile = new Stack<>();
         for (CardEntity cardEntity: cardEntities) {
             drawPile.push(new Card(cardEntity));
         }
-        return new Game(0, players,drawPile);
+
+        Game game = new Game(1, players,drawPile);
+        return game;
     }
 }

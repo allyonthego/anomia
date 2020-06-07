@@ -18,13 +18,6 @@ public class Card {
     @Getter
     private String word;
 
-//    public Card(int id, CardColour colour, String word) {
-//        this.id = id;
-////        ++count;
-//        this.colour = colour;
-//        this.word = word;
-//    }
-
     public Card(CardEntity cardEntity) {
         id = cardEntity.getId();
         colour = CardColour.valueOf(cardEntity.getColour());

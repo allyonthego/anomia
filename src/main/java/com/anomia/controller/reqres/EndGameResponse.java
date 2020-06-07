@@ -13,7 +13,7 @@ public class EndGameResponse {
     public EndGameResponse() {}
     public EndGameResponse(Game game) {
         cardCounts = new HashMap<>();
-        for (Player plyr: game.getPlayers()) {
+        for (Player plyr: game.getPlayers().values()) {
             cardCounts.put(plyr.getId(), plyr.getWinPile().size());
         }
     }

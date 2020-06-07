@@ -2,17 +2,16 @@ package com.anomia.controller.database;
 
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import static javax.persistence.GenerationType.*;
 
 @Entity
 @Table(name = "card")
 public class CardEntity {
     @Getter
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=IDENTITY)
     private int id;
     @Getter
     private String colour;
@@ -23,21 +22,18 @@ public class CardEntity {
     @Getter
     private int playerId;
     @Getter
-    private boolean winPile;
+    private boolean isDrawPile = true;
     @Getter
-    private boolean playPile;
+    private boolean isWinPile = false;
     @Getter
-    private boolean isReveal;
+    private boolean isPlayPile = false;
+    @Getter
+    private boolean isReveal = false;
 
     public CardEntity() {}
 
-    // testing only
-//    public CardEntity(String colour, String word) {
-//        this.colour = colour;
-//        this.word = word;
-//    }
-    public CardEntity(int id, String colour, String word) {
-        this.id = id;
+    public CardEntity(int gameId, String colour, String word) {
+        this.gameId = gameId;
         this.colour = colour;
         this.word = word;
     }

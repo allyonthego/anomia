@@ -1,6 +1,7 @@
 package com.anomia;
 
 import com.anomia.controller.AnomiaController;
+import com.anomia.controller.database.*;
 import com.anomia.controller.reqres.AddWinRequest;
 import com.anomia.controller.reqres.StartGameRequest;
 import com.anomia.controller.state.Game;
@@ -10,11 +11,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static com.anomia.helper.Helper.asJsonString;
 import static com.anomia.helper.Helper.createEmptyGame;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -28,6 +32,12 @@ class AnomiaApplicationTest {
 	private AnomiaController controller;
 	@Autowired
 	private MockMvc mockMvc;
+	@Autowired
+	private CardRepository cardRepository;
+	@Autowired
+	private GameRepository gameRepository;
+	@Autowired
+	private PlayerRepostiory playerRepostiory;
 
 	int numPlayers = 2;
 	int gameId = 1;
@@ -55,6 +65,9 @@ class AnomiaApplicationTest {
 				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("\"cardCounts\":")));
 		assertEquals(0, controller.gameListCount());
+		assertEquals(0,cardRepository.findAllByGameId(gameId).size());
+		assertTrue(!gameRepository.findById(gameId).isPresent());
+		assertEquals(0,playerRepostiory.findAllByGameId(gameId).size());
 	}
 
 	@Test
@@ -88,6 +101,34 @@ class AnomiaApplicationTest {
 						.contentType(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("\"gameId\":1")));
+		assertTrue(checkRepository());
 		controller.deleteGame(gameId);
+	}
+
+	// should be unit tests
+	boolean checkRepository() {
+		List<CardEntity> cardEntities = cardRepository.findAllByGameId(gameId);
+		List<PlayerEntity> playerEntities = playerRepostiory.findAllByGameId(gameId);
+		GameEntity gameEntity = gameRepository.findById(gameId).get();
+
+		assertEquals(5,cardEntities.size());
+		assertEquals(1,gameEntity.getId());
+		assertEquals(2,playerEntities.size());
+
+		int gameEntityId = gameEntity.getId();
+		PlayerEntity playerEntity = playerEntities.get(0);
+		CardEntity cardEntity = cardEntities.get(0);
+
+		assertEquals(gameEntityId,playerEntity.getGameId());
+		assertEquals(gameEntityId,cardEntity.getGameId());
+		assertEquals("BLUE",cardEntity.getColour());
+		assertEquals(0,cardEntity.getPlayerId());
+		assertEquals("Test",cardEntity.getWord());
+		assertTrue(cardEntity.isDrawPile());
+		assertTrue(!cardEntity.isReveal());
+		assertTrue(!cardEntity.isWinPile());
+		assertTrue(!cardEntity.isPlayPile());
+
+		return true;
 	}
 }

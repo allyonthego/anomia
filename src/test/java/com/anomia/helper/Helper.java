@@ -6,7 +6,6 @@ import com.anomia.controller.state.Game;
 import com.anomia.controller.state.Player;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -24,13 +23,7 @@ public class Helper {
         HashMap<Integer, Player> players = new HashMap<>();
         players.put(1, new Player(1));
         players.put(2, new Player(2));
-        Stack<CardEntity> cardEntities = createCardEntityPile();
-        Stack<Card> drawPile = new Stack<>();
-        for (CardEntity cardEntity: cardEntities) {
-            drawPile.push(new Card(cardEntity));
-        }
-
-        Game game = new Game(1, players,drawPile);
+        Game game = new Game(1, players,createCardPile());
         return game;
     }
 }

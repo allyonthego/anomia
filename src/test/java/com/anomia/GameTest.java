@@ -8,25 +8,25 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import static com.anomia.controller.state.CardColour.BLUE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.anomia.helper.Helper.createEmptyGame;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
     private int playerId = 0;
     private int numCards = 5;
     private int numPlayers = 4;
 
+    // create game in play to simulate this
     // Step 1
     @Test
     public void WHEN_StartGame_THEN_GamePopulated() {
-        Game game = new Game(numPlayers);
+        Game game = createEmptyGame();
 
-        assertEquals(0, game.getId());
+        assertNotNull(game);
         assertTrue(drawPilePopulated(game.getDrawPile()));
         assertTrue(playersPopulated(game.getPlayers()));
 
-        Game.decrCount();
+//        Game.decrCount();
     }
 
     public boolean drawPilePopulated(Stack<Card> drawPile) {
@@ -34,7 +34,7 @@ public class GameTest {
         Card card = drawPile.peek();
         assertEquals(numCards - 1, card.getId());
         assert(!card.isReveal());
-        assertEquals(BLUE, card.getColour());
+
         assertEquals("Test", card.getWord());
         return true;
     }
@@ -48,7 +48,7 @@ public class GameTest {
     // Step 2
     @Test
     public void WHEN_AddPlayPile_THEN_DrawPopPlayPush() {
-        Game game = new Game(numPlayers);
+        Game game = createEmptyGame();
 
         game.addPlayPile(playerId);
         assertEquals(numCards - 1, game.getDrawPile().size());
@@ -56,13 +56,13 @@ public class GameTest {
         assertEquals(1, playPile.size());
         assertEquals(true, playPile.peek().isReveal());
 
-        Game.decrCount();
+//        Game.decrCount();
     }
 
     // Step 3
     @Test
     public void WHEN_AddWinPile_THEN_PlayPopPlayPush() {
-        Game game = new Game(numPlayers);
+        Game game = createEmptyGame();
 
         game.addPlayPile(playerId);
         game.addPlayPile(playerId + 1);

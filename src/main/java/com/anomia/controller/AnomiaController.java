@@ -1,28 +1,27 @@
 package com.anomia.controller;
 
-import com.anomia.controller.database.CardEntity;
-import com.anomia.controller.database.CardRepository;
-import com.anomia.controller.state.Game;
 import com.anomia.controller.reqres.AddWinRequest;
 import com.anomia.controller.reqres.EndGameResponse;
 import com.anomia.controller.reqres.StartGameRequest;
 import com.anomia.controller.reqres.StartGameResponse;
+import com.anomia.controller.service.GameService;
+import com.anomia.controller.state.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 @RestController
 public class AnomiaController {
     @Autowired
-    CardRepository cardRepository;
-    private static ArrayList<Game> gameList = new ArrayList<>();
+    GameService gameService;
+    private static HashMap<Integer, Game> gameList = new HashMap<Integer, Game>();
 
     @DeleteMapping("/games/{gameId}")
     public EndGameResponse deleteGame(@PathVariable int gameId) {
-        Game game = gameList.get(gameId);
-        EndGameResponse endGameResponse = new EndGameResponse(game);
-        gameListRemove(game.getId());
+        EndGameResponse endGameResponse = new EndGameResponse(gameList.get(gameId));
+        gameService.endGame(gameId);
+        gameList.remove(gameId);
         return endGameResponse;
     }
 
@@ -47,22 +46,22 @@ public class AnomiaController {
 
     @PostMapping("/games")
     public StartGameResponse postGame(@RequestBody StartGameRequest req) {
-        Game game = new Game(req.getNumPlayers());
-        gameList.add(game);
-        cardRepository.save(new CardEntity(0, "BLUE", "Hello"));
-        System.out.println(cardRepository.findCardById(0));
+        Game game = gameService.startGame(req.getNumPlayers());
+//        Game game = new Game(req.getNumPlayers());
+        gameList.put(game.getId(),game);
         return new StartGameResponse(game.getId());
     }
 
+    // for testing
     public void gameListAdd(Game game) {
-        gameList.add(game);
+        gameList.put(game.getId(),game);
     }
     public int gameListCount() { return gameList.size(); }
-    public void gameListRemove() {
-        gameListRemove(gameList.size() - 1);
-    }
+//    public void gameListRemove() {
+//        gameListRemove(gameList.size() - 1);
+//    }
     public void gameListRemove(int gameId) {
-        Game.decrCount();
+//        Game.decrCount();
         gameList.remove(gameId);
     }
 }

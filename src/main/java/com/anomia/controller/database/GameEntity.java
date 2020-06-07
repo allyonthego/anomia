@@ -8,20 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "card")
-public class CardEntity {
+@Table(name = "game")
+public class GameEntity {
     @Getter
     @Id
     @GeneratedValue
     private int id;
-    @Getter
-    private String colour;
-    @Getter
-    private String word;
-
-    public CardEntity() {}
-    public CardEntity(String colour, String word) {
-        this.colour = colour;
-        this.word = word;
-    }
+    public GameEntity() {}
 }

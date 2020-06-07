@@ -32,7 +32,12 @@ public class AnomiaController {
 
     @GetMapping("/games/{gameId}")
     public GetGameResponse getGame(@PathVariable int gameId) {
-        return new GetGameResponse(gameList.get(gameId));
+        if (gameList.containsKey(gameId)) {
+            return new GetGameResponse(gameList.get(gameId));
+        }
+        else {
+            throw new NotFoundException();
+        }
     }
 
     @PostMapping("/games/{gameId}/{playerId}/playPile")

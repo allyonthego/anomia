@@ -5,7 +5,6 @@ import com.anomia.controller.database.CardEntity;
 import java.util.Arrays;
 import java.util.Stack;
 
-// refactor to list it out only once
 public class CardEntityPile {
     public static Stack<CardEntity> createCardEntityPile(int gameId) {
         CardEntity[] pile = {

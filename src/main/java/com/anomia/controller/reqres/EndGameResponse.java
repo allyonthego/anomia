@@ -1,7 +1,7 @@
 package com.anomia.controller.reqres;
 
-import com.anomia.controller.data.Game;
-import com.anomia.controller.data.Player;
+import com.anomia.controller.state.Game;
+import com.anomia.controller.state.Player;
 import lombok.Getter;
 
 import java.util.HashMap;

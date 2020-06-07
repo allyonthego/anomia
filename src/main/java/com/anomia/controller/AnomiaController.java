@@ -1,16 +1,21 @@
 package com.anomia.controller;
 
-import com.anomia.controller.data.Game;
+import com.anomia.controller.database.CardEntity;
+import com.anomia.controller.database.CardRepository;
+import com.anomia.controller.state.Game;
 import com.anomia.controller.reqres.AddWinRequest;
 import com.anomia.controller.reqres.EndGameResponse;
 import com.anomia.controller.reqres.StartGameRequest;
 import com.anomia.controller.reqres.StartGameResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
 @RestController
 public class AnomiaController {
+    @Autowired
+    CardRepository cardRepository;
     private static ArrayList<Game> gameList = new ArrayList<>();
 
     @DeleteMapping("/games/{gameId}")
@@ -44,6 +49,8 @@ public class AnomiaController {
     public StartGameResponse postGame(@RequestBody StartGameRequest req) {
         Game game = new Game(req.getNumPlayers());
         gameList.add(game);
+        cardRepository.save(new CardEntity(0, "BLUE", "Hello"));
+        System.out.println(cardRepository.findCardById(0));
         return new StartGameResponse(game.getId());
     }
 

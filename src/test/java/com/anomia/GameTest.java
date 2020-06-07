@@ -1,14 +1,14 @@
 package com.anomia;
 
-import com.anomia.controller.data.Card;
-import com.anomia.controller.data.Game;
-import com.anomia.controller.data.Player;
+import com.anomia.controller.state.Card;
+import com.anomia.controller.state.Game;
+import com.anomia.controller.state.Player;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
-import static com.anomia.controller.data.CardColour.BLUE;
+import static com.anomia.controller.state.CardColour.BLUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

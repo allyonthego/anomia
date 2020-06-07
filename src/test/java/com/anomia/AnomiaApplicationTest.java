@@ -1,7 +1,7 @@
 package com.anomia;
 
 import com.anomia.controller.AnomiaController;
-import com.anomia.controller.data.Game;
+import com.anomia.controller.state.Game;
 import com.anomia.controller.reqres.AddWinRequest;
 import com.anomia.controller.reqres.StartGameRequest;
 import org.junit.jupiter.api.Test;

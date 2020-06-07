@@ -77,32 +77,43 @@ public class GameService {
         for (PlayerEntity playerEntity : playerEntities) {
             int playerId = playerEntity.getId();
 
-            Stack<Card> playPile = cardFromRespository(gameId, 2);
-            Stack<Card> winPile = cardFromRespository(gameId, 3);
+            Stack<Card> playPile = cardFromRespository(gameId, playerId,2);
+            Stack<Card> winPile = cardFromRespository(gameId, playerId,3);
 
             players.put(playerId, new Player(playerId, playPile, winPile));
         }
 
-        Stack<Card> drawPile = cardFromRespository(gameId, 1);
+        Stack<Card> drawPile = cardFromRespository(gameId, 0,1);
 
         Game game = new Game(gameEntity.getId(), players, drawPile);
         return game;
     }
 
-    private Stack<Card> cardFromRespository(int gameId, int whichPile) {
+    private Stack<Card> cardFromRespository(int gameId, int playerId, int whichPile) {
         Stack<Card> cardPile = new Stack<>();
         List<CardEntity> cardEntities;
 
-        cardEntities = cardRepository.findAllByGameIdAndWhichPileAndIsReveal(gameId, whichPile, false);
+        boolean isPlayPile = (whichPile == 2) ? true : false;
+
+        if (isPlayPile) {
+            cardEntities = cardRepository
+                    .findAllByGameIdAndPlayerIdAndWhichPileAndIsReveal(gameId, playerId, whichPile, false);
+        }
+        else {
+            cardEntities = cardRepository
+                    .findAllByGameIdAndPlayerIdAndWhichPile(gameId, playerId, whichPile);
+        }
 
         for (CardEntity cardEntity : cardEntities) {
             cardPile.push(new Card(cardEntity));
         }
 
-        if (whichPile == 2) {
-            cardEntities =
-                    cardRepository.findAllByGameIdAndWhichPileAndIsReveal(gameId, whichPile, true);
-            cardPile.push(new Card(cardEntities.get(0)));
+        if (isPlayPile) {
+            cardEntities = cardRepository
+                    .findAllByGameIdAndPlayerIdAndWhichPileAndIsReveal(gameId, playerId, whichPile, true);
+            if (!cardPile.isEmpty()) {
+                cardPile.push(new Card(cardEntities.get(0)));
+            }
         }
         return cardPile;
     }

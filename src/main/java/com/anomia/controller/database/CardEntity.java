@@ -41,12 +41,12 @@ public class CardEntity {
 
 
     public CardEntity(int gameId, int playerId, Card card, int whichPile) {
-        id = card.getId();
-        colour = card.getColour().toString();
-        word = card.getWord();
-        gameId = gameId;
-        playerId = playerId;
+        this.id = card.getId();
+        this.colour = card.getColour().toString();
+        this.word = card.getWord();
+        this.gameId = gameId;
+        this.playerId = playerId;
         this.whichPile = whichPile;
-        isReveal = card.isReveal();
+        this.isReveal = card.isReveal();
     }
 }

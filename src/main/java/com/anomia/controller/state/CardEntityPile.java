@@ -22,13 +22,13 @@ public class CardEntityPile {
                 new CardEntity(gameId,"YELLOW", "Male tennis player"),
                 new CardEntity(gameId,"RED", "Astronaut"),
                 new CardEntity(gameId,"GREEN", "Breakfast"),
-                new CardEntity(gameId,"YELLOW", "Bean"),
-                new CardEntity(gameId,"BLUE", "Hat"),
-                new CardEntity(gameId,"RED", "Rock Opera"),
-                new CardEntity(gameId,"YELLOW", "Sitcom"),
+                new CardEntity(gameId,"BLUE", "Bean"),
+                new CardEntity(gameId,"YELLOW", "Hat"),
+                new CardEntity(gameId,"BLUE", "Rock Opera"),
+                new CardEntity(gameId,"RED", "Sitcom"),
                 new CardEntity(gameId,"YELLOW", "Vegetable"),
                 new CardEntity(gameId,"GREEN", "Hot Drink"),
-                new CardEntity(gameId,"RED", "Palindrome"),
+                new CardEntity(gameId,"YELLOW", "Palindrome"),
         };
         Stack<CardEntity> stack = new Stack<>();
         stack.addAll(Arrays.asList(pile));

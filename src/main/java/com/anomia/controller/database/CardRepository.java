@@ -8,7 +8,8 @@ import java.util.List;
 @Repository
 public interface CardRepository extends JpaRepository<CardEntity, Integer> {
 
-    List<CardEntity> findAllByGameIdAndWhichPileAndIsReveal(int gameId,int whichPile,boolean isReveal);
+    List<CardEntity> findAllByGameIdAndPlayerIdAndWhichPile(int gameId, int playerId, int whichPile);
+    List<CardEntity> findAllByGameIdAndPlayerIdAndWhichPileAndIsReveal(int gameId,int playerId,int whichPile,boolean isReveal);
     List<CardEntity> deleteByGameId(int gameId);
 
     // testing

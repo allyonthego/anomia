@@ -40,6 +40,8 @@ class AnomiaApplicationTest {
 	@Autowired
 	private PlayerRepostiory playerRepostiory;
 
+	int winId = 1;
+	int loseId = 2;
 	int numPlayers = 2;
 	int gameId = 1;
 	int numCards = 20;
@@ -66,10 +68,19 @@ class AnomiaApplicationTest {
 				.perform(delete("/games/"+res.getGameId()))
 				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("\"cardCounts\":")));
+		assertTrue(endGameCheckRepo());
+	}
+
+	@Test
+	void WHEN_EndSaveGame_THEN_ReturnEndGameResponse() throws Exception {
+		StartGameResponse res = controller.postGame(new StartGameRequest(numPlayers));
+		scenario(res.getGameId());
+		mockMvc
+				.perform(delete("/games/"+res.getGameId()+"/save"))
+				.andExpect(status().isOk())
+				.andExpect(content().string(containsString("\"cardCounts\":")));
 		assertEquals(0, controller.gameListCount());
-		assertEquals(0,cardRepository.findAllByGameId(gameId).size());
-		assertEquals(0,playerRepostiory.findAllByGameId(gameId).size());
-		assertEquals(0,gameRepository.findAllById(gameId).size());
+		assertTrue(endSaveGameCheckRepo(res.getGameId()));
 	}
 
 	@Test
@@ -97,19 +108,84 @@ class AnomiaApplicationTest {
 
 	@Test
 	void WHEN_PostStartGame_THEN_ReturnGameId() throws Exception {
-		// gameid might not be 1
+		// gameId might not be 1
 		mockMvc
 				.perform(post("/games")
 						.content(asJsonString(new StartGameRequest(numPlayers)))
 						.contentType(APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("\"gameId\":1")));
-		assertTrue(checkRepository());
+		assertTrue(startGameCheckRepo());
+		controller.deleteGame(gameId);
+	}
+
+	@Test
+	void WHEN_PostStartSaveGame_THEN_ReturnGameId() throws Exception {
+		StartGameResponse res = controller.postGame(new StartGameRequest(numPlayers));
+		int gameId = res.getGameId();
+		scenario(gameId);
+		controller.deleteSaveGame(gameId);
+		mockMvc
+				.perform(post("/games/"+gameId+"/save")
+						.content(asJsonString(new StartGameRequest(numPlayers)))
+						.contentType(APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(content().string(containsString("\"gameId\":"+gameId)));
+
+		assertEquals(1, controller.gameListCount());
+		assertTrue(endSaveGameCheckRepo(gameId));
 		controller.deleteGame(gameId);
 	}
 
 	// should be unit tests
-	boolean checkRepository() {
+	private boolean endGameCheckRepo() {
+		assertEquals(0, controller.gameListCount());
+		assertEquals(0, cardRepository.findAllByGameId(gameId).size());
+		assertEquals(0, playerRepostiory.findAllByGameId(gameId).size());
+		assertEquals(0, gameRepository.findAllById(gameId).size());
+		return true;
+	}
+	private void scenario(int gameId) {
+		controller.postAddPlayPile(gameId,winId);
+		controller.postAddPlayPile(gameId,winId);
+		controller.postAddPlayPile(gameId,loseId);
+		controller.postAddWinPile(gameId, winId, new AddWinRequest(loseId));
+	}
+	private boolean endSaveGameCheckRepo(int gameId) {
+		List<CardEntity> cardEntities = cardRepository.findAllByGameId(gameId);
+		List<PlayerEntity> playerEntities = playerRepostiory.findAllByGameId(gameId);
+		List<GameEntity> gameEntities = gameRepository.findAllById(gameId);
+
+		assertEquals(numCards,cardEntities.size());
+		assertEquals(numPlayers,playerEntities.size());
+		assertEquals(1,gameEntities.size());
+
+		int gameEntityId = gameEntities.get(0).getId();
+		PlayerEntity playerEntity = playerEntities.get(0);
+		CardEntity wonCard = cardEntities.get(numCards-1);
+		CardEntity topPlayCard = cardEntities.get(numCards-2);
+		CardEntity secondPlayCard = cardEntities.get(numCards-3);
+
+		assertEquals(gameEntityId,playerEntity.getGameId());
+
+		assertEquals(gameEntityId,wonCard.getGameId());
+		assertEquals(1,wonCard.getPlayerId());
+		assertTrue(wonCard.isReveal());
+		assertEquals(3,wonCard.getWhichPile());
+
+		assertEquals(gameEntityId,topPlayCard.getGameId());
+		assertEquals(1,topPlayCard.getPlayerId());
+		assertTrue(topPlayCard.isReveal());
+		assertEquals(2,topPlayCard.getWhichPile());
+
+		assertEquals(gameEntityId,secondPlayCard.getGameId());
+		assertEquals(1,secondPlayCard.getPlayerId());
+		assertTrue(!secondPlayCard.isReveal());
+		assertEquals(2,secondPlayCard.getWhichPile());
+
+		return true;
+	}
+	private boolean startGameCheckRepo() {
 		List<CardEntity> cardEntities = cardRepository.findAllByGameId(gameId);
 		List<PlayerEntity> playerEntities = playerRepostiory.findAllByGameId(gameId);
 		List<GameEntity> gameEntities = gameRepository.findAllById(gameId);

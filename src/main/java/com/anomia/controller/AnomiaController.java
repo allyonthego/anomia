@@ -1,9 +1,6 @@
 package com.anomia.controller;
 
-import com.anomia.controller.reqres.AddWinRequest;
-import com.anomia.controller.reqres.EndGameResponse;
-import com.anomia.controller.reqres.StartGameRequest;
-import com.anomia.controller.reqres.StartGameResponse;
+import com.anomia.controller.reqres.*;
 import com.anomia.controller.service.GameService;
 import com.anomia.controller.state.Game;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +31,8 @@ public class AnomiaController {
     }
 
     @GetMapping("/games/{gameId}")
-    public Game getGame(@PathVariable int gameId) {
-        return gameList.get(gameId);
+    public GetGameResponse getGame(@PathVariable int gameId) {
+        return new GetGameResponse(gameList.get(gameId));
     }
 
     @PostMapping("/games/{gameId}/{playerId}/playPile")
@@ -59,7 +56,6 @@ public class AnomiaController {
         return new StartGameResponse(game.getId());
     }
 
-    // requirement: cannot postSaveGame in the middle of a game
     @PostMapping("/games/{gameId}/save")
     public StartGameResponse postSaveGame(@PathVariable int gameId) {
         Game game = gameService.startSaveGame(gameId);

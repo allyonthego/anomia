@@ -12,7 +12,7 @@ import static com.anomia.controller.state.CardColour.BLUE;
 import static com.anomia.helper.Helper.createEmptyGame;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GameTest {
+public class StateTest {
     private int playerId = 1;
     private int numCards = 20;
     private int numPlayers = 2;
